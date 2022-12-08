@@ -5,10 +5,10 @@ services:
   database:
     image: mariadb:latest
     restart: always
-    container_name: base
-    ports: ["3307:3306"]
+    container_name: base-to-phpmyadmin
+    ports: ["3309:3306"]
     environment:
-      - MYSQL_DATABASE=mysql-base
+      - MYSQL_DATABASE=base
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=admin
@@ -17,14 +17,19 @@ services:
     volumes:
       - base-volume:/var/lib/mysql
 
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - base-network
 
- # phpmyadmin:
- #   image: phpmyadmin
-  #  restart: always
-  #  ports:
-  #    - 8080:80
-  #  environment:
-     # - PMA_ARBITRARY=1
+
+    
+
 
 
 
@@ -38,4 +43,4 @@ volumes:
 
 networks:
       base-network:
-        driver: bridge
+       driver: bridge
