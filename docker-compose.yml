@@ -2,10 +2,28 @@ version: '3.1'
 
 services:
 
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+     - WORDPRESS_DB_HOST=mariadb
+     - WORDPRESS_DB_USER=admin
+     - WORDPRESS_DB_PASSWORD=admin
+     - WORDPRESS_DB_NAME=base
+      
+    volumes:
+      - base-volume:/var/www/html
+    networks:
+      - base-network
+
   database:
     image: mariadb:latest
+    hostname: mariadb
     restart: always
-    container_name: base-to-phpmyadmin
+    container_name: base
     ports: ["3309:3306"]
     environment:
       - MYSQL_DATABASE=base
@@ -19,6 +37,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
+    container_name: phpmyadmin
     restart: always
     ports:
       - 8080:80
